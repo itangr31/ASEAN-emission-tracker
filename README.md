@@ -1,3 +1,3 @@
 # ASEAN Emission Tracker
 
-Create a Dashboard for ASEAN carbon emissions based on sector using data from climate trace.
+Create a dashboard for ASEAN carbon emission based on sector using data from climate trace.
