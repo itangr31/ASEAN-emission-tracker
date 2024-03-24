@@ -1,0 +1,22 @@
+  #gas-dropdown .Select-menu-outer {
+    background-color: rgb(25, 25, 25);
+    color: white;
+}
+
+/* changes the text color of input box */
+#gas-dropdown .Select-value-label {
+    color: rgb(25, 25, 25) !important;
+}
+#sector-dropdown .Select-menu-outer {
+    background-color: rgb(25, 25, 25);
+    color: white;
+}
+
+/* changes the text color of input box */
+#sector-dropdown .Select-value-label {
+    color: rgb(25, 25, 25) !important;
+}
+#year-slider .rc-slider-mark-text {
+    color: rgb(25, 25, 25);
+    transform: translate(-50%, -33px) !important;
+}
