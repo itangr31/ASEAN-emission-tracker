@@ -18,7 +18,7 @@ geojson_1 = json.load(f)
 
 #Dash App
 
-app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(external_stylesheets=[dbc.themes.SUPERHERO])
 
 #App Layout
 
@@ -61,32 +61,30 @@ controls = dbc.Card([
     )
 ],body=True,
 )
+graphics = html.Div([
+                dbc.Card([html.Div(
+                            className="div-map-chart",
+                            children=[
+                            dcc.Graph(id="map-chart")]
+                        ),
+                        html.Br(),
+                        html.Div(
+                            className="div-bar-chart",
+                            children=[
+                            " Select country in map to filter bar chart by country",
+                            dcc.Graph(id="bar-chart")
+                            ]
+                        ),
+html.Button('Reset to ASEAN',id='btn-click',n_clicks=0),]),])
 
 app.layout = dbc.Container([
-    html.H1("ASEAN Emission Tracker"),
+    html.H1("ASEAN Emissions Tracker"),
     html.Hr(),
-    dbc.Row(
-        [
-            dbc.Col(controls,md=4),
-            dbc.Col([html.Div(
-                className="div-map-chart",
-                children=[
-                    dcc.Graph(id="map-chart")
-                ]
-            ),
-            html.Div(
-                className="div-bar-chart",
-                children=[
-                    "select country in map to filter bar chart by country",
-                    dcc.Graph(id="bar-chart") 
-                ]
-            ),
-            html.Button('Reset to ASEAN',id='btn-click',n_clicks=0)],md=7)
-
-        ]
-    )
-
-],style={"max-width": "none"})
+    dbc.Row([
+        dbc.Col([controls],md=5),
+        dbc.Col([graphics],lg=7)
+    ])
+],style={"max-width":"none"})
 
 @app.callback(
     Output("map-chart","figure"),
@@ -106,7 +104,7 @@ def update_chart(gas,sector,year):
         df = df[(df["sector"] == sector) & (df["gas"] == gas)]
         df = df.groupby("iso3_country",as_index=False)[["emissions_quantity"]].sum()
     fig = px.choropleth_mapbox(df, geojson=geojson_1, color="emissions_quantity",
-                                   locations="iso3_country", featureidkey="properties.color_code",height=600,width=1400,
+                                   locations="iso3_country", featureidkey="properties.color_code",height=600,
                                    color_continuous_scale="jet",
                                    center={"lat": 1.3521, "lon": 103.8198},zoom=3,
                                    labels={'emissions_quantity':'tonnes'})
