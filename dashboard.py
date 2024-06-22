@@ -61,6 +61,24 @@ controls = dbc.Card([
     )
 ],body=True,
 )
+trends = dbc.Card([
+    
+    html.Div(
+        className="div-trend-chart",
+        children=[
+            dcc.Graph(id="trend-chart")
+        ]
+    ),
+    html.Br(),
+    html.Div(
+        className="div-subsector-chart",
+        children=[
+            dcc.Graph(id="subsector-chart")
+        ]
+    )
+
+
+],)
 graphics = html.Div([
                 dbc.Card([html.Div(
                             className="div-map-chart",
@@ -81,7 +99,7 @@ app.layout = dbc.Container([
     html.H1("ASEAN Emissions Tracker"),
     html.Hr(),
     dbc.Row([
-        dbc.Col([controls],md=5),
+        dbc.Col([controls,trends],md=5),
         dbc.Col([graphics],lg=7)
     ])
 ],style={"max-width":"none"})
@@ -165,6 +183,30 @@ def update_bar_chart(gas,sector,year,country):
         dff = dff.groupby("original_inventory_sector",as_index=False)[["emissions_quantity"]].sum()
         figg = px.bar(dff,x="original_inventory_sector",y="emissions_quantity",color="original_inventory_sector",title=f"{selected_country}")
         return figg
+
+@app.callback(
+    Output("trend-chart","figure"),
+    [Input("gas-dropdown","value"),Input("sector-dropdown","value"),Input("year-slider","value"),Input("map-chart","clickData")]
+)
+def update_trend_chart(gas,sector,year,country):
+    if(gas == 'all' and sector == 'all' and country is None):
+        df = df_all[df_all["Year"] <= year]
+        df = df.groupby(["gas","Year"],as_index=False)[["emissions_quantity"]].sum()
+        fig = px.line(df,x="Year",y="emissions_quantity",color="gas")
+        return fig
+
+@app.callback(
+    Output("subsector-chart","figure"),
+    [Input("gas-dropdown","value"),Input("sector-dropdown","value"),Input("year-slider","value"),Input("map-chart","clickData")]
+)
+def update_trend_chart(gas,sector,year,country):
+    if(gas == 'all' and sector == 'all' and country is None):
+        df = df_all[df_all["Year"] <= year]
+        df = df.groupby(["iso3_country","Year"],as_index=False)[["emissions_quantity"]].sum()
+        fig = px.line(df,x="Year",y="emissions_quantity",color="iso3_country")
+        return fig
+
+
 
 #Run App
 if __name__ == '__main__':
