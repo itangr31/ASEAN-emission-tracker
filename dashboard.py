@@ -145,13 +145,13 @@ def update_bar_chart(gas,sector,year,country):
     if(gas == 'all' and sector == 'all' and country is None ):
         dff = df_all[df_all["Year"]==year]
         dff = dff.groupby(["sector","gas"],as_index=False)[["emissions_quantity"]].sum()
-        figg = px.bar(dff,x="sector",y="emissions_quantity",color="gas",title="ASEAN")
+        figg = px.bar(dff,x="sector",y="emissions_quantity",color="gas",title="ASEAN",template="plotly_white")
         return figg
     elif(gas == 'all' and sector == 'all'):
         selected_country = country["points"][0]["location"]
         dff = df_all[(df_all["Year"] == year) & (df_all["iso3_country"] == selected_country)]
         dff = dff.groupby(["sector","gas"],as_index=False)[["emissions_quantity"]].sum()
-        figg = px.bar(dff,x="sector",y="emissions_quantity",color="gas",title=f"{selected_country}")
+        figg = px.bar(dff,x="sector",y="emissions_quantity",color="gas",title=f"{selected_country}",template="plotly_white")
         return figg
     elif(gas != 'all' and sector == 'all'):
         if country is None:
@@ -161,7 +161,7 @@ def update_bar_chart(gas,sector,year,country):
             selected_country = country["points"][0]["location"]
             dff = df_all[(df_all["Year"] == year) & (df_all["gas"] == gas) & (df_all["iso3_country"] == selected_country)]
         dff = dff.groupby(["sector","gas"],as_index=False)[["emissions_quantity"]].sum()
-        figg = px.bar(dff,x="sector",y="emissions_quantity",color="sector",title=f"{selected_country}")
+        figg = px.bar(dff,x="sector",y="emissions_quantity",color="sector",title=f"{selected_country}",template="plotly_white")
         return figg
     elif(gas == 'all' and sector != 'all'):
         if country is None:
@@ -171,7 +171,7 @@ def update_bar_chart(gas,sector,year,country):
             selected_country = country["points"][0]["location"]
             dff = df_all[(df_all["Year"] == year) & (df_all["sector"] == sector) &(df_all["iso3_country"] == selected_country)]
         dff = dff.groupby(["original_inventory_sector","gas"],as_index=False)[["emissions_quantity"]].sum()
-        figg = px.bar(dff,x="original_inventory_sector",y="emissions_quantity",color="gas",title=f"{selected_country}")
+        figg = px.bar(dff,x="original_inventory_sector",y="emissions_quantity",color="gas",title=f"{selected_country}",template="plotly_white")
         return figg
     elif(gas != 'all' and sector != 'all'):
         if country is None:
@@ -181,7 +181,7 @@ def update_bar_chart(gas,sector,year,country):
             selected_country = country["points"][0]["location"]
             dff = df_all[(df_all["Year"] == year) & (df_all["sector"] == sector) & (df_all["gas"] == gas) & (df_all["iso3_country"] == selected_country)]
         dff = dff.groupby("original_inventory_sector",as_index=False)[["emissions_quantity"]].sum()
-        figg = px.bar(dff,x="original_inventory_sector",y="emissions_quantity",color="original_inventory_sector",title=f"{selected_country}")
+        figg = px.bar(dff,x="original_inventory_sector",y="emissions_quantity",color="original_inventory_sector",title=f"{selected_country}",template="plotly_white")
         return figg
 
 @app.callback(
@@ -192,18 +192,20 @@ def update_trend_chart(gas,sector,year,country):
     if(gas == 'all' and sector == 'all' and country is None):
         df = df_all[df_all["Year"] <= year]
         df = df.groupby(["gas","Year"],as_index=False)[["emissions_quantity"]].sum()
-        fig = px.line(df,x="Year",y="emissions_quantity",color="gas")
+        fig = px.line(df,x="Year",y="emissions_quantity",color="gas",template="plotly_white")
+        fig.update_xaxes(dtick=1)
         return fig
 
 @app.callback(
     Output("subsector-chart","figure"),
     [Input("gas-dropdown","value"),Input("sector-dropdown","value"),Input("year-slider","value"),Input("map-chart","clickData")]
 )
-def update_trend_chart(gas,sector,year,country):
+def update_subsector_chart(gas,sector,year,country):
     if(gas == 'all' and sector == 'all' and country is None):
         df = df_all[df_all["Year"] <= year]
         df = df.groupby(["iso3_country","Year"],as_index=False)[["emissions_quantity"]].sum()
-        fig = px.line(df,x="Year",y="emissions_quantity",color="iso3_country")
+        fig = px.line(df,x="Year",y="emissions_quantity",color="iso3_country",template="plotly_white")
+        fig.update_xaxes(dtick=1)
         return fig
 
 
