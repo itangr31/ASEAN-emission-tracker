@@ -9,7 +9,7 @@ from dash.dependencies import Input,Output
 from dash_bootstrap_components._components.Container import Container
 
 
-app = dash.Dash(external_stylesheets=[dbc.themes.FLATLY])
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 header = dbc.Navbar(
     dbc.Container(
@@ -68,12 +68,12 @@ header = dbc.Navbar(
 def data_for_boxes(header,text):
     card_content = [
         dbc.CardHeader(header,
-                       style={"fontSize": "30px", "fontWeight": "bold", "textAlign": "center"}),  # Header styling,
+                       style={"fontSize": "2vh", "fontWeight": "bold", "textAlign": "center"}),  # Header styling,
         dbc.CardBody(
             [
             dcc.Markdown(dangerously_allow_html = True,
             children=["{}".format(text)],
-            style={"fontSize": "50px", "textAlign": "center"})
+            style={"fontSize": "5vh", "textAlign": "center"})
             ]
         )
     ]
@@ -82,15 +82,15 @@ def data_for_boxes(header,text):
 box_maps = html.Div(
     [
         dbc.Row([
-            dbc.Col(dbc.Card(data_for_boxes("Difference from last year",100),color = 'primary',style = {'text-align':'center',"height":"15vh"}, inverse = True),xs = 12, sm = 12, md = 4, lg = 4, xl = 4, style = {'width':'470px','padding':'12px 12px 12px 12px'}),
-            dbc.Col(dbc.Card(data_for_boxes("Biggest Sector Emitters",100),color = 'primary',style = {'text-align':'center',"height":"15vh"}, inverse = True),xs = 12, sm = 12, md = 4, lg = 4, xl = 4, style = {'width':'470px','padding':'12px 12px 12px 12px'}),
-            dbc.Col(dbc.Card(data_for_boxes("Emission per Capita",100),color = 'primary',style = {'text-align':'center',"height":"15vh"}, inverse = True),xs = 12, sm = 12, md = 4, lg = 4, xl = 4, style = {'width':'470px','padding':'12px 12px 12px 12px'}),
-            dbc.Col(dbc.Card(data_for_boxes("Total Emission",100),color = 'primary',style = {'text-align':'center',"height":"15vh"}, inverse = True),xs = 12, sm = 12, md = 4, lg = 4, xl = 4, style = {'width':'470px','padding':'12px 12px 12px 12px'})
+            dbc.Col(dbc.Card(data_for_boxes("Difference from last year",100),color = 'primary',style = {'text-align':'center',"height":"15vh"}, inverse = True),xs = 12, sm = 12, md = 4, lg = 4, xl = 4, style = {'width':'16.5vw','padding':'12px 12px 12px 12px'},width="auto"),
+            dbc.Col(dbc.Card(data_for_boxes("Biggest Sector Emitters",100),color = 'primary',style = {'text-align':'center',"height":"15vh"}, inverse = True),xs = 12, sm = 12, md = 4, lg = 4, xl = 4, style = {'width':'16.5vw','padding':'12px 12px 12px 12px'},width="auto"),
+            dbc.Col(dbc.Card(data_for_boxes("Emission per Capita",100),color = 'primary',style = {'text-align':'center',"height":"15vh"}, inverse = True),xs = 12, sm = 12, md = 4, lg = 4, xl = 4, style = {'width':'16.5vw','padding':'12px 12px 12px 12px'},width="auto"),
+            dbc.Col(dbc.Card(data_for_boxes("Total Emission",100),color = 'primary',style = {'text-align':'center',"height":"15vh"}, inverse = True),xs = 12, sm = 12, md = 4, lg = 4, xl = 4, style = {'width':'16.5vw','padding':'12px 12px 12px 12px'},width="auto")
     
         ],
         style={"marginBottom":"3vh"}), #Add spacing below this row
         dbc.Row([
-            dbc.Col(dbc.Card(dbc.CardBody("GHG Emission Heatmap",style={"fontSize": "20px", "textAlign": "center"}),color='primary',inverse=True),style = {'text-align':'center',"height":"3vh"})
+            dbc.Col(dbc.Card(dbc.CardBody("GHG Emission Heatmap",style={"fontSize": "20px", "textAlign": "center",'padding':'12px 12px 12px 12px'}),color='primary',inverse=True),style = {'text-align':'center',"height":"3vh"})
         ]),
         dbc.Row([
             dbc.Col(dbc.Card([
@@ -110,18 +110,51 @@ box_maps = html.Div(
 
 )
 
-graphs = html.Div(
-    [
-        html.P('graphs')
-    ]
-)
+graphs = html.Div([
 
+    dbc.Row([
+            dbc.Col(dbc.Card(dbc.CardBody("Emission Treemap",style={"fontSize": "20px", "textAlign": "center",'padding':'12px 12px 12px 12px'}),color='primary',inverse=True),style = {'text-align':'center',"height":"3vh"})
+        ]),
+    dbc.Row([
+        dbc.Col(
+            dbc.Card([
+                html.Div(
+                    className="div-treemap-chart",
+                    children=[
+                        dcc.Graph(id='treemap-chart',
+                                  style={"height":"40vh"})
+                    ]
+                )
+            ])
+        )
+    ],
+    style={"marginBottom":"3vh"}),
+    dbc.Row([
+            dbc.Col(dbc.Card(dbc.CardBody("Total Emission Time Series",style={"fontSize": "20px", "textAlign": "center",'padding':'12px 12px 12px 12px'}),color='primary',inverse=True),style = {'text-align':'center',"height":"3vh"})
+        ]),
+    dbc.Row([
+        dbc.Col(
+            dbc.Card([
+                html.Div(
+                    className="div-timeseries-chart",
+                    children=[
+                        dcc.Graph(id='timeseries-chart',
+                                  style={"height":"35vh"})
+                    ]
+                )
+            ])
+        )
+    ])
+
+
+
+])
 app.layout = dbc.Container(
     [
     dbc.Row(
         [dbc.Col(header,width=12)
         ],
-        style={"height":"10vh"}
+        style={"height":"8vh"}
 
     ),
     dbc.Row(
@@ -129,13 +162,13 @@ app.layout = dbc.Container(
         dbc.Col(graphs, width=4),
         dbc.Col(box_maps, width = 8, className='bg-light')
         ],
-        style={"height":"90vh"}
+        style={"height":"92vh"}
         ),
     ],
 fluid=True
 )
 
-style_header = {'backgroundColor':'rgb(224,224,224)',
+style_header = {'backgroundColor':'primary',
                     'fontWeight':'bold',
                     'border':'4px solid white',
                     'fontSize':'12px'
