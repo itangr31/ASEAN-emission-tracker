@@ -3,7 +3,6 @@ asttokens==2.4.1
 attrs==24.2.0
 blinker==1.6.2
 bottleneck==1.4.2
-brotli-python==1.0.9
 certifi==2024.8.30
 charset-normalizer==3.3.2
 click==8.1.7
