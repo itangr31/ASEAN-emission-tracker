@@ -10,7 +10,7 @@ from dash_bootstrap_components._components.Container import Container
 
 #Read Dataset
 
-df_all = pd.read_csv("df_asean.csv")#Annual Country Dataset
+df_all = pd.read_csv("https://github.com/itangr31/ASEAN-emission-tracker/blob/0fd0e3e9da1b097382231e3ffacefb19a374a475/df_asean.csv?raw=true")#Annual Country Dataset
 df_all = df_all[df_all["sector"] != "forestry-and-land-use"]
 df_all = df_all.iloc[:,2:]
 
