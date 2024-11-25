@@ -24,7 +24,7 @@ header = dbc.Navbar(
     dbc.Container(
         [
             dbc.NavbarBrand(
-                "ASEAN Emission Dashboard",
+                "ASEAN Emissions Dashboard",
                 href="#",
                 className="ms-3",
                 style={"fontSize": "30px", "fontWeight": "bold", "color": "white"}
@@ -137,13 +137,13 @@ box_maps = html.Div(
         dbc.Row([
             dbc.Col(dbc.Card(data_for_boxes("Difference from Last Year", "difference-card"),color = 'primary',style = {'text-align':'center',"height":"15vh"}, inverse = True),xs = 12, sm = 12, md = 4, lg = 4, xl = 4, style = {'width':'16.5vw','padding':'12px 12px 12px 12px'},width="auto"),
             dbc.Col(dbc.Card(data_for_boxes("Biggest Sector Emitters", "sector-card"),color = 'primary',style = {'text-align':'center',"height":"15vh"}, inverse = True),xs = 12, sm = 12, md = 4, lg = 4, xl = 4, style = {'width':'16.5vw','padding':'12px 12px 12px 12px'},width="auto"),
-            dbc.Col(dbc.Card(data_for_boxes("Emission per Capita", "per-capita-card"),color = 'primary',style = {'text-align':'center',"height":"15vh"}, inverse = True),xs = 12, sm = 12, md = 4, lg = 4, xl = 4, style = {'width':'16.5vw','padding':'12px 12px 12px 12px'},width="auto"),
-            dbc.Col(dbc.Card(data_for_boxes("Total Emission", "total-emission-card"),color = 'primary',style = {'text-align':'center',"height":"15vh"}, inverse = True),xs = 12, sm = 12, md = 4, lg = 4, xl = 4, style = {'width':'16.5vw','padding':'12px 12px 12px 12px'},width="auto")
+            dbc.Col(dbc.Card(data_for_boxes("Emissions per Capita", "per-capita-card"),color = 'primary',style = {'text-align':'center',"height":"15vh"}, inverse = True),xs = 12, sm = 12, md = 4, lg = 4, xl = 4, style = {'width':'16.5vw','padding':'12px 12px 12px 12px'},width="auto"),
+            dbc.Col(dbc.Card(data_for_boxes("Total Emissions", "total-emission-card"),color = 'primary',style = {'text-align':'center',"height":"15vh"}, inverse = True),xs = 12, sm = 12, md = 4, lg = 4, xl = 4, style = {'width':'16.5vw','padding':'12px 12px 12px 12px'},width="auto")
     
         ],
         style={"marginBottom":"3vh"}), #Add spacing below this row
         dbc.Row([
-            dbc.Col(dbc.Card(dbc.CardBody("GHG Emission Heatmap",style={"fontSize": "20px", "textAlign": "center",'padding':'12px 12px 12px 12px'}),color='primary',inverse=True),style = {'text-align':'center',"height":"3vh"})
+            dbc.Col(dbc.Card(dbc.CardBody("GHG Emissions Heatmap",style={"fontSize": "20px", "textAlign": "center",'padding':'12px 12px 12px 12px'}),color='primary',inverse=True),style = {'text-align':'center',"height":"3vh"})
         ]),
         dbc.Row([
             dbc.Col(dbc.Card([
@@ -163,7 +163,7 @@ box_maps = html.Div(
 graphs = html.Div([
 
     dbc.Row([
-            dbc.Col(dbc.Card(dbc.CardBody("Emission Treemap",style={"fontSize": "20px", "textAlign": "center",'padding':'12px 12px 12px 12px'}),color='primary',inverse=True),style = {'text-align':'center',"height":"3vh"})
+            dbc.Col(dbc.Card(dbc.CardBody("Emissions Treemap",style={"fontSize": "20px", "textAlign": "center",'padding':'12px 12px 12px 12px'}),color='primary',inverse=True),style = {'text-align':'center',"height":"3vh"})
         ]),
     dbc.Row([
         dbc.Col(
@@ -180,7 +180,7 @@ graphs = html.Div([
     ],
     style={"marginBottom":"3vh"}),
     dbc.Row([
-            dbc.Col(dbc.Card(dbc.CardBody("Total Emission Time Series",style={"fontSize": "20px", "textAlign": "center",'padding':'12px 12px 12px 12px'}),color='primary',inverse=True),style = {'text-align':'center',"height":"3vh"})
+            dbc.Col(dbc.Card(dbc.CardBody("Total Emissions Time Series",style={"fontSize": "20px", "textAlign": "center",'padding':'12px 12px 12px 12px'}),color='primary',inverse=True),style = {'text-align':'center',"height":"3vh"})
         ]),
     dbc.Row([
         dbc.Col(
@@ -244,19 +244,29 @@ def update_chart(country, year, gas):
         path = "sector"
         label = "Sector"
 
+    df["scaled_emissions"] = df["emissions_quantity"]/1000000 
     # Create treemap
     fig = px.treemap(
         df,
         path=[path],
-        values="emissions_quantity",
+        values="scaled_emissions",
         color=path
     )
-    fig.data[0].textinfo = 'label + percent parent + value'
+    fig.data[0].textinfo = 'label+percent parent+value'
+    fig.data[0].texttemplate = '%{label}<br><br>%{value:.2f} MT<br>Share: %{percentParent:.1%}'
 
-    # Update layout
+
+# Update font style and size for text
+    fig.data[0].textfont = dict(
+        size=16,  # Increase font size
+        family="Arial Black",  # Specify font family (optional)
+        color="black"  # Specify font color (optional)
+    )
+
+# Update layout
     fig.update_layout(
         title={
-            "text": f"Emission Breakdown by {label} ({year}, t{gas.upper()})",
+            "text": f"Emission Breakdown by {label} ({year}, MT{gas.upper()})",
             "y": 0.95,  # Position of the title (closer to the top)
             "x": 0.5,   # Center the title
             "xanchor": "center",
@@ -293,7 +303,7 @@ def update_chart(country, year, gas):
 
     # Create the figure
     fig = px.area(df, x="Year", y="emissions_quantity", color="sector", template="simple_white",
-                  labels=dict(emissions_quantity="Tonnes CO2e"))
+                  labels=dict(emissions_quantity=f"Tonnes {gas.upper()}e"))
 
     # Update layout for proper integer axis
     fig.update_layout(
