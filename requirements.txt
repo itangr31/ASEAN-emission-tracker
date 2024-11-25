@@ -53,7 +53,6 @@ pygments==2.18.0
 pyparsing==3.2.0
 pysocks==1.7.1
 python-dateutil==2.9.0.post0
-python-fastjsonschema==2.20.0
 python-tzdata==2023.3
 pytz==2024.1
 pyzmq==25.1.2
