@@ -14,7 +14,7 @@ df_all = pd.read_csv("https://github.com/itangr31/ASEAN-emission-tracker/blob/0f
 df_all = df_all[df_all["sector"] != "forestry-and-land-use"]
 df_all = df_all.iloc[:,2:]
 
-df_map = pd.read_csv('df_asean_emission_sources.csv')#Emission Source Datase
+df_map = pd.read_csv("https://github.com/itangr31/ASEAN-emission-tracker/blob/6f4a6531ce52864881cd429fc3404982d8f320ef/df_asean_emission_sources.csv?raw=true")#Emission Source Datase
 df_map = df_map.iloc[:,1:]
 
 
