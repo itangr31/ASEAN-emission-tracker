@@ -71,3 +71,5 @@ wcwidth==0.2.13
 werkzeug==3.0.6
 wheel==0.44.0
 zipp==3.20.2
+gunicorn==19.7.1
+
