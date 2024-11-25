@@ -19,6 +19,7 @@ df_map = df_map.iloc[:,1:]
 
 
 app = dash.Dash(external_stylesheets=[dbc.themes.SPACELAB])
+server = app.server
 
 header = dbc.Navbar(
     dbc.Container(
@@ -500,4 +501,4 @@ style_header = {'backgroundColor':'primary',
                     },
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=False)
