@@ -213,31 +213,28 @@ app.layout = dbc.Container(
 
 #Treemap Chart Callback
 @app.callback(
-    Output("treemap-chart","figure"),
-    [Input("country-dropdown","value"),Input("year-dropdown","value"),Input("gas-dropdown","value")]
+    Output("treemap-chart", "figure"),
+    [Input("country-dropdown", "value"), Input("year-dropdown", "value"), Input("gas-dropdown", "value")]
 )
-def update_chart(country, year, gas):
+def update_treemap_chart(country, year, gas):
     # Filter data based on inputs
     if country == 'all':
         df = df_all[(df_all["Year"] == int(year)) & (df_all["gas"] == gas)]
         if df.empty:
-            print("Filtered DataFrame is empty for 'all' countries")
             return px.treemap(title="No data available for the selected filters.")
-
         df = df.groupby(["iso3_country"], as_index=False)["emissions_quantity"].sum()
         path = "iso3_country"
         label = "Country"
     else:
         df = df_all[(df_all["Year"] == int(year)) & (df_all["gas"] == gas) & (df_all["iso3_country"] == country)]
         if df.empty:
-            print("Filtered DataFrame is empty for country:", country)
             return px.treemap(title="No data available for the selected filters.")
-
         df = df.groupby(["sector"], as_index=False)["emissions_quantity"].sum()
         path = "sector"
         label = "Sector"
 
-    df["scaled_emissions"] = df["emissions_quantity"]/1000000 
+    df["scaled_emissions"] = df["emissions_quantity"] / 1000000
+
     # Create treemap
     fig = px.treemap(
         df,
@@ -246,89 +243,82 @@ def update_chart(country, year, gas):
         color=path
     )
     fig.data[0].textinfo = 'label+percent parent+value'
-    fig.data[0].texttemplate = '%{label}<br><br>%{value:.2f} MT<br>Share: %{percentParent:.1%}'
+    fig.data[0].texttemplate = '%{label}<br>%{value:.2f} MT<br>Share: %{percentParent:.1%}'
+    fig.data[0].textfont.size = "calc(1.2vw + 1.2vh)"  # Responsive font size
 
-
-# Update font style and size for text
-    fig.data[0].textfont = dict(
-        size=16,  # Increase font size
-        family="Arial Black",  # Specify font family (optional)
-        color="black"  # Specify font color (optional)
-    )
-
-# Update layout
+    # Update layout for responsive size
     fig.update_layout(
         title={
             "text": f"Emission Breakdown by {label} ({year}, MT{gas.upper()})",
-            "y": 0.95,  # Position of the title (closer to the top)
-            "x": 0.5,   # Center the title
+            "y": 0.95,
+            "x": 0.5,
             "xanchor": "center",
-            "yanchor": "top"
+            "yanchor": "top",
+            "font": {"size": "calc(1.5vw + 1.5vh)"},  # Responsive title font size
         },
-        uniformtext=dict(minsize=18, mode='hide'),
-        margin=dict(t=50, l=25, r=25, b=25)
+        margin=dict(t=50, l=25, r=25, b=25),
+        height="calc(50vh + 2vw)",  # Responsive height
+        width="100%",  # Use full width
     )
     return fig
 
 #Timeseries Callback
 @app.callback(
-    Output("timeseries-chart","figure"),
-    [Input("country-dropdown","value"),Input("year-dropdown","value"),Input("gas-dropdown","value")]
+    Output("timeseries-chart", "figure"),
+    [Input("country-dropdown", "value"), Input("year-dropdown", "value"), Input("gas-dropdown", "value")]
 )
-
-def update_chart(country, year, gas):
+def update_timeseries_chart(country, year, gas):
     if country == 'all':
         df = df_all[(df_all["Year"] <= int(year)) & (df_all["gas"] == gas)]
         if df.empty:
-            print("Filtered DataFrame is empty for 'all' countries")
             return px.area(title="No data available for the selected filters.")
     else:
         df = df_all[(df_all["Year"] <= int(year)) & (df_all["gas"] == gas) & (df_all["iso3_country"] == country)]
         if df.empty:
-            print("Filtered DataFrame is empty for country:", country)
             return px.area(title="No data available for the selected filters.")
 
-    # Ensure 'Year' is an integer
     df["Year"] = df["Year"].astype(int)
-
-    # Group the data
     df = df.groupby(["Year", "sector"], as_index=False)["emissions_quantity"].sum()
 
-    # Create the figure
-    fig = px.area(df, x="Year", y="emissions_quantity", color="sector", template="simple_white",
-                  labels=dict(emissions_quantity=f"Tonnes {gas.upper()}e"))
+    fig = px.area(
+        df,
+        x="Year",
+        y="emissions_quantity",
+        color="sector",
+        template="simple_white",
+        labels=dict(emissions_quantity=f"Tonnes {gas.upper()}e")
+    )
 
-    # Update layout for proper integer axis
+    # Update layout for responsive size
     fig.update_layout(
         legend=dict(
-            orientation="h",  # Make the legend horizontal
-            yanchor="bottom",  # Align the legend vertically
-            y=1.02,  # Position it above the graph
-            xanchor="center",  # Align the legend horizontally
-            x=0.5,  # Center the legend
-            font=dict(size=16)  # Increase legend font size
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="center",
+            x=0.5,
+            font=dict(size="calc(1.2vw + 1.2vh)")  # Responsive legend font size
         ),
         xaxis=dict(
-            title_font=dict(size=20),  # Increase x-axis label font size
-            tickmode='linear',  # Use a linear tick mode for integers
-            dtick=1,  # Set the interval for ticks to 1 year
-            tickformat=None,  # Remove unnecessary formatting
+            title_font=dict(size="calc(1.5vw + 1.5vh)"),
+            tickfont=dict(size="calc(1.2vw + 1.2vh)"),
         ),
         yaxis=dict(
-            title_font=dict(size=20)  # Increase y-axis label font size
+            title_font=dict(size="calc(1.5vw + 1.5vh)"),
+            tickfont=dict(size="calc(1.2vw + 1.2vh)"),
         ),
-        font=dict(size=18)  # Increase the overall font size for the chart
+        font=dict(size="calc(1.2vw + 1.2vh)"),  # General responsive font size
+        height="calc(60vh + 2vw)",  # Responsive height
+        width="100%",  # Use full width
     )
     return fig
 
 #Heatmap Callback
 @app.callback(
-    Output("map-chart","figure"),
-    [Input("country-dropdown","value"),Input("year-dropdown","value"),Input("gas-dropdown","value")]
+    Output("map-chart", "figure"),
+    [Input("country-dropdown", "value"), Input("year-dropdown", "value"), Input("gas-dropdown", "value")]
 )
-
-def update_chart(country, year, gas):
-    # Define the center coordinates and zoom levels for each country
+def update_heatmap_chart(country, year, gas):
     country_centers = {
         "BRN": {"lat": 4.5353, "lon": 114.7277, "zoom": 7},
         "KHM": {"lat": 12.5657, "lon": 104.9910, "zoom": 7},
@@ -339,65 +329,52 @@ def update_chart(country, year, gas):
         "PHL": {"lat": 12.8797, "lon": 121.7740, "zoom": 6},
         "SGP": {"lat": 1.3521, "lon": 103.8198, "zoom": 10},
         "THA": {"lat": 15.8700, "lon": 100.9925, "zoom": 6},
-        "VNM": {"lat": 14.0583, "lon": 108.2772, "zoom": 6}  # Vietnam added
+        "VNM": {"lat": 14.0583, "lon": 108.2772, "zoom": 6},
     }
-    
-    # Precompute 99th percentile values for each gas type
-    gas_quantiles = {
-        gas_type: df_map[df_map["gas"] == gas_type]["emissions_quantity"].quantile(0.99)
-        for gas_type in df_map["gas"].unique()
-    }
-    
-    # Get the range_max for the selected gas
-    range_max = gas_quantiles.get(gas, 1)  # Default to 1 if gas is not in the dataset
-    
-    # If 'all', use ASEAN region's center and default zoom
+
     if country == 'all':
         df = df_map[(df_map["Year"] == int(year)) & (df_map["gas"] == gas)]
         center = {"lat": 5, "lon": 115}
         zoom = 4
         radius = 10
         if df.empty:
-            print("Filtered DataFrame is empty for 'all' countries")
             return px.density_mapbox(title="No data available for the selected filters.")
     else:
-        # Use country-specific center and zoom
         df = df_map[(df_map["Year"] == int(year)) & (df_map["gas"] == gas) & (df_map["iso3_country"] == country)]
-        country_data = country_centers.get(country, {"lat": 5, "lon": 115, "zoom": 4})  # Default values
+        country_data = country_centers.get(country, {"lat": 5, "lon": 115, "zoom": 4})
         center = {"lat": country_data["lat"], "lon": country_data["lon"]}
         zoom = country_data["zoom"]
         radius = 20
         if df.empty:
-            print(f"Filtered DataFrame is empty for country: {country}")
             return px.density_mapbox(title="No data available for the selected filters.")
-    
+
     fig = px.density_mapbox(
         df,
         lat='lat',
         lon='lon',
         z='emissions_quantity',
-        radius=radius,  # Increase radius for denser hotspots
+        radius=radius,
         center=center,
         zoom=zoom,
         mapbox_style="carto-positron",
-        color_continuous_scale="rainbow",  # Keep rainbow scale
-        labels={"emissions_quantity": f"t{gas}"},
-        range_color=(0, range_max)  # Apply precomputed gas-specific quantile
+        labels={"emissions_quantity": f"t{gas}"}
     )
 
-    # Update layout for clearer hotspots and thicker colors
+    # Update layout for responsive size
     fig.update_layout(
         autosize=True,
-        margin={"r": 0, "t": 40, "l": 0, "b": 0},
+        margin={"r": 0, "t": 40, "l": 0, "b": 40},  # Add margin for better spacing
         coloraxis_colorbar=dict(
             title=f"t{gas}",
             titleside="top",
             ticks="outside",
-            tickformat=".0f",  # Format tick labels as integers
-            dtick=(range_max / 5),  # Divide tick marks into 5 levels
-        )
+            tickfont=dict(size="calc(1.2vw + 1.2vh)"),  # Responsive colorbar font size
+        ),
+        height="calc(60vh + 2vw)",  # Responsive height
+        width="100%"  # Use full width
     )
     return fig
+
 
 @app.callback(
     [
