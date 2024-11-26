@@ -81,18 +81,33 @@ header = dbc.Navbar(
     color="dark", dark=True,
 )
 
-# Helper function to create data cards
+# Helper function to create responsive cards
 def data_for_boxes(header, idname):
     return dbc.Card(
         [
-            dbc.CardHeader(header, style={"fontSize": "2vh", "fontWeight": "bold", "textAlign": "center"}),
-            dbc.CardBody(html.Div(id=idname, style={"fontSize": "3vh", "textAlign": "center"}))
+            dbc.CardHeader(
+                header,
+                style={"fontSize": "calc(1.5vw + 1.5vh)", "fontWeight": "bold", "textAlign": "center"}
+            ),
+            dbc.CardBody(
+                html.Div(
+                    id=idname,
+                    style={"fontSize": "calc(2vw + 2vh)", "textAlign": "center"}
+                )
+            )
         ],
-        color='primary', inverse=True, style={'text-align': 'center', "height": "15vh"}
+        color='primary',
+        inverse=True,
+        style={
+            'text-align': 'center',
+            "height": "calc(12vh + 2vw)",
+            "width": "100%",
+            "marginBottom": "1rem"
+        }
     )
 
-# Box map section
-# Box map section with adjusted map height and margin
+
+# Responsive box maps section
 box_maps = html.Div(
     [
         dbc.Row([
@@ -104,15 +119,23 @@ box_maps = html.Div(
         dbc.Row([
             dbc.Col(
                 dbc.Card(
-                    dbc.CardBody("GHG Emissions Heatmap", style={"fontSize": "20px", "textAlign": "center"}),
-                    color='primary', inverse=True
-                ), className='mb-3'
+                    dbc.CardBody(
+                        "GHG Emissions Heatmap",
+                        style={"fontSize": "calc(1.5vw + 1.5vh)", "textAlign": "center"}
+                    ),
+                    color='primary',
+                    inverse=True
+                ),
+                className='mb-3'
             )
         ]),
         dbc.Row([
             dbc.Col(
                 dbc.Card(
-                    dcc.Graph(id="map-chart", style={"height": "65vh", "width": "100%", "marginBottom": "20px"}),
+                    dcc.Graph(
+                        id="map-chart",
+                        style={"height": "calc(60vh + 2vw)", "width": "100%"}
+                    ),
                 )
             )
         ]),
@@ -121,42 +144,59 @@ box_maps = html.Div(
 
 
 # Graph section
+# Responsive graphs section
 graphs = html.Div(
     [
         dbc.Row([
             dbc.Col(
                 dbc.Card(
-                    dbc.CardBody("Emissions Treemap", style={"fontSize": "20px", "textAlign": "center"}),
-                    color='primary', inverse=True
-                ), className='mb-3'
+                    dbc.CardBody(
+                        "Emissions Treemap",
+                        style={"fontSize": "calc(1.5vw + 1.5vh)", "textAlign": "center"}
+                    ),
+                    color='primary',
+                    inverse=True
+                ),
+                className='mb-3'
             )
         ]),
         dbc.Row([
             dbc.Col(
                 dbc.Card(
-                    dcc.Graph(id='treemap-chart', style={"height": "40vh", "width": "100%"}),
+                    dcc.Graph(
+                        id='treemap-chart',
+                        style={"height": "calc(40vh + 2vw)", "width": "100%"}
+                    )
                 )
             )
         ]),
         dbc.Row([
             dbc.Col(
                 dbc.Card(
-                    dbc.CardBody("Total Emissions Time Series", style={"fontSize": "20px", "textAlign": "center"}),
-                    color='primary', inverse=True
-                ), className='mb-3'
+                    dbc.CardBody(
+                        "Total Emissions Time Series",
+                        style={"fontSize": "calc(1.5vw + 1.5vh)", "textAlign": "center"}
+                    ),
+                    color='primary',
+                    inverse=True
+                ),
+                className='mb-3'
             )
         ]),
         dbc.Row([
             dbc.Col(
                 dbc.Card(
-                    dcc.Graph(id='timeseries-chart', style={"height": "40vh", "width": "100%"}),
+                    dcc.Graph(
+                        id='timeseries-chart',
+                        style={"height": "calc(40vh + 2vw)", "width": "100%"}
+                    )
                 )
             )
         ])
     ]
 )
 
-# Layout
+# Responsive layout
 app.layout = dbc.Container(
     [
         dbc.Row([dbc.Col(header, width=12)], style={"height": "8vh"}),
