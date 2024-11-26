@@ -199,7 +199,16 @@ graphs = html.Div(
 # Responsive layout
 app.layout = dbc.Container(
     [
-        dbc.Row([dbc.Col(header, width=12)], style={"height": "8vh"}),
+        # Navbar row
+        dbc.Row(
+            [dbc.Col(header, width=12)],
+            style={"height": "8vh"}  # Set fixed navbar height
+        ),
+        # Padding below the navbar
+        html.Div(
+            style={"height": "0.5vh"}  # Add spacing to separate content from the navbar
+        ),
+        # Content rows
         dbc.Row(
             [
                 dbc.Col(graphs, xs=12, sm=12, md=4, lg=4, xl=4, className='mb-3'),
@@ -210,6 +219,7 @@ app.layout = dbc.Container(
     ],
     fluid=True
 )
+
 
 #Treemap Chart Callback
 @app.callback(
