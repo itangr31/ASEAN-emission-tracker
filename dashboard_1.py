@@ -21,10 +21,15 @@ server = app.server
 header = dbc.Navbar(
     dbc.Container(
         [
-            dbc.NavbarBrand("ASEAN Emissions Dashboard", href="#", className="ms-3",
-                            style={"fontSize": "30px", "fontWeight": "bold", "color": "white"}),
+            dbc.NavbarBrand(
+                "ASEAN Emissions Dashboard",
+                href="#",
+                className="ms-3",
+                style={"fontSize": "30px", "fontWeight": "bold", "color": "white"}
+            ),
             dbc.Nav(
                 [
+                    # Country Dropdown
                     html.Div(
                         [
                             dbc.Label("Country:", style={"color": "white", "fontSize": "18px"}),
@@ -44,6 +49,7 @@ header = dbc.Navbar(
                         ],
                         className="d-flex align-items-center"
                     ),
+                    # Year Dropdown
                     html.Div(
                         [
                             dbc.Label("Year:", style={"color": "white", "fontSize": "18px"}),
@@ -56,6 +62,7 @@ header = dbc.Navbar(
                         ],
                         className="d-flex align-items-center"
                     ),
+                    # Gas Dropdown
                     html.Div(
                         [
                             dbc.Label("Gas Type:", style={"color": "white", "fontSize": "18px"}),
@@ -78,8 +85,11 @@ header = dbc.Navbar(
         ],
         fluid=True,
     ),
-    color="dark", dark=True,
+    color="dark",
+    dark=True,
+    style={"zIndex": "1000", "position": "sticky", "top": "0"}  # Ensure the navbar stays on top
 )
+
 
 # Helper function to create responsive cards
 def data_for_boxes(header, idname):
