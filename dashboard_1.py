@@ -216,7 +216,7 @@ app.layout = dbc.Container(
         ),
         # Padding below the navbar
         html.Div(
-            style={"height": "0.5vh"}  # Add spacing to separate content from the navbar
+            style={"height": "4vh"}  # Add spacing to separate content from the navbar
         ),
         # Content rows
         dbc.Row(
