@@ -87,12 +87,12 @@ def data_for_boxes(header, idname):
         [
             dbc.CardHeader(
                 header,
-                style={"fontSize": "calc(1.5vw + 1.5vh)", "fontWeight": "bold", "textAlign": "center"}
+                style={"fontSize": "calc(0.5vw + 0.5vh)", "fontWeight": "bold", "textAlign": "center"}
             ),
             dbc.CardBody(
                 html.Div(
                     id=idname,
-                    style={"fontSize": "calc(2vw + 2vh)", "textAlign": "center"}
+                    style={"fontSize": "calc(1vw + 1vh)", "textAlign": "center"}
                 )
             )
         ],
@@ -121,7 +121,7 @@ box_maps = html.Div(
                 dbc.Card(
                     dbc.CardBody(
                         "GHG Emissions Heatmap",
-                        style={"fontSize": "calc(1.5vw + 1.5vh)", "textAlign": "center"}
+                        style={"fontSize": "calc(0.5vw + 0.5vh)", "textAlign": "center"}
                     ),
                     color='primary',
                     inverse=True
@@ -134,7 +134,7 @@ box_maps = html.Div(
                 dbc.Card(
                     dcc.Graph(
                         id="map-chart",
-                        style={"height": "calc(60vh + 2vw)", "width": "100%"}
+                        style={"height": "calc(65vh + 5vw)", "width": "100%"}
                     ),
                 )
             )
@@ -152,7 +152,7 @@ graphs = html.Div(
                 dbc.Card(
                     dbc.CardBody(
                         "Emissions Treemap",
-                        style={"fontSize": "calc(1.5vw + 1.5vh)", "textAlign": "center"}
+                        style={"fontSize": "calc(0.5vw + 0.5vh)", "textAlign": "center"}
                     ),
                     color='primary',
                     inverse=True
@@ -175,7 +175,7 @@ graphs = html.Div(
                 dbc.Card(
                     dbc.CardBody(
                         "Total Emissions Time Series",
-                        style={"fontSize": "calc(1.5vw + 1.5vh)", "textAlign": "center"}
+                        style={"fontSize": "calc(0.5vw + 0.5vh)", "textAlign": "center"}
                     ),
                     color='primary',
                     inverse=True
