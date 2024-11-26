@@ -92,6 +92,7 @@ def data_for_boxes(header, idname):
     )
 
 # Box map section
+# Box map section with adjusted map height and margin
 box_maps = html.Div(
     [
         dbc.Row([
@@ -111,12 +112,13 @@ box_maps = html.Div(
         dbc.Row([
             dbc.Col(
                 dbc.Card(
-                    dcc.Graph(id="map-chart", style={"height": "50vh", "width": "100%"}),
+                    dcc.Graph(id="map-chart", style={"height": "65vh", "width": "100%", "marginBottom": "20px"}),
                 )
             )
         ]),
     ]
 )
+
 
 # Graph section
 graphs = html.Div(
